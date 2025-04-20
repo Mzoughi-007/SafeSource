@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      height: 100vh;
+      background-color: #f9fafb;
+      color: #1a202c;
+      transition: all 0.3s ease;
+    }
+
+    .sidebar {
+      width: 220px;
+      background-color: #ffffff;
+      border-right: 1px solid #e5e7eb;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: background-color 0.3s ease;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .logo-container img {
+      height: 32px;
+      width: auto;
+    }
+
+    .nav a {
+      display: block;
+      margin-bottom: 1rem;
+      color: #1a202c;
+      text-decoration: none;
+      padding: 0.5rem;
+      border-radius: 5px;
+    }
+
+    .nav a:hover, .nav a.active {
+      background-color: #2563eb;
+      color: white;
+    }
+
+    .main {
+      flex: 1;
+      padding: 1.5rem;
+      overflow-y: auto;
+    }
+
+    .topbar {
+      margin-bottom: 2rem;
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+    }
+
+    .topbar button {
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .topbar button:hover {
+      background: #1e40af;
+    }
+
+    .section {
+      display: none;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    textarea, input {
+      width: 100%;
+      padding: 0.5rem;
+      font-size: 1rem;
+      border: 1px solid #d1d5db;
+      border-radius: 5px;
+      resize: vertical;
+      margin-bottom: 1rem;
+    }
+
+    .article-list {
+      border: 1px solid #d1d5db;
+      border-radius: 5px;
+      padding: 2rem;  
+      background: white;
+      margin-bottom: 2rem; 
+    }
+
+    .dark-mode {
+      background-color: #1a202c;
+      color: #f9fafb;
+    }
+
+    .dark-mode .sidebar {
+      background-color: #111827;
+      border-right-color: #374151;
+    }
+
+    .dark-mode .nav a {
+      color: #e5e7eb;
+    }
+
+    .dark-mode .nav a:hover,
+    .dark-mode .nav a.active {
+      background-color: #2563eb;
+      color: white;
+    }
+
+    .dark-mode .article-list {
+      background-color: #1f2937;
+      border-color: #374151;
+    }
+
+    .dark-mode textarea,
+    .dark-mode input {
+      background-color: #374151;
+      color: white;
+      border-color: #4b5563;
+    }
+
+    .dark-mode .topbar button {
+      background-color: #374151;
+      color: white;
+    }
+
+    .dark-mode .topbar button:hover {
+      background-color: #2563eb;
+    }
+
+    #searchForm {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+#searchForm input {
+  padding: 0.75rem 1rem;
+  font-size: 1.1rem;
+  border: 1px solid #2563eb;
+  border-radius: 5px;
+  width: 80%;
+  max-width: 500px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+  height: 44px; /* Explicitly set height to make sure it's the same as the button */
+}
+
+#searchForm input:focus {
+  border-color: #1e40af;
+  outline: none;
+}
+
+#searchForm button {
+  padding: 0.75rem 1.5rem;
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: background-color 0.3s ease;
+  height: 44px; /* Explicitly set height to match the input */
+}
+
+#searchForm button:hover {
+  background-color: #1e40af;
+}
+</style>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PoliScript</title>
+</head>
+<body>
+  <div class="sidebar">
+    <div>
+      <div class="logo-container">
+        <img id="logo-img" src="../assets/logo2.png" alt="Logo" />
+        <span><strong>Safe Source</strong></span>
+      </div>
+      <nav class="nav">
+        <a href="#" class="active" onclick="switchSection('write', event)">Write</a>
+        <a href="#" onclick="switchSection('articles', event)">Articles</a>
+        <a href="#" onclick="switchSection('drafts', event)">Drafts</a>
+        <a href="#" onclick="switchSection('settings', event)">Settings</a>
+      </nav>
+    </div>
+    <div>
+      <small>&copy; 2025 PoliScript</small>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <button onclick="toggleDarkMode()">🌓 Theme</button>
+    </div>
+
+    <div id="searchForm">
+      <input type="text" id="searchInput" placeholder="Search for articles...">
+      <button type="submit" onclick="performSearch()">Search</button>
+    </div>
+
+    <!-- Write Section -->
+    <div id="write" class="section active">
+      <h2>Write Article</h2>
+      <input type="text" placeholder="Title" />
+      <textarea placeholder="Start writing your article here..."></textarea>
+      <button>Save Draft</button>
+    </div>
+
+    <!-- Articles Section -->
+    <div id="articles" class="section">
+      <h2>Published Articles</h2>
+      <div class="article-list">
+        <h3>Why Local Politics Matter</h3>
+        <p>Published on: 2025-04-19</p>
+      </div>
+      <div class="article-list">
+        <h3>The Shifting Landscape of State Policy</h3>
+        <p>Published on: 2025-04-17</p>
+      </div>
+    </div>
+
+    <!-- Drafts Section -->
+    <div id="drafts" class="section">
+      <h2>Drafts</h2>
+      <div class="article-list">
+        <h3>Unfinished Thoughts on Campaign Finance</h3>
+        <p>Last edited: 2025-04-18</p>
+      </div>
+
+      <h3>Upload and View a File</h3>
+      <form id="file-upload-form" enctype="multipart/form-data">
+        <input type="file" id="fileInput" name="file" accept=".txt,.pdf" />
+        <button type="button" onclick="scanFile()">Upload and Scan</button>
+      </form>
+
+      <div id="scan-results"></div>
+    </div>
+
+    <!-- Settings Section -->
+    <div id="settings" class="section">
+      <h2>Settings</h2>
+      <p>Profile name: <strong>Jane Doe</strong></p>
+      <p>Email: <strong>jane@example.com</strong></p>
+      <button>Log Out</button>
+    </div>
+
+    <!-- URL Scanner Section -->
+    <div class="scanner">
+      <h3>Scan a URL</h3>
+      <input type="text" id="urlInput" placeholder="Enter a URL to scan">
+      <button onclick="scanUrl()">Scan URL</button>
+    </div>
+
+    <!-- Scan Result Output -->
+    <div id="result"></div>
+  </div>
+
+  <script>
+    // Navigation logic
+    function switchSection(id, event) {
+      event.preventDefault();
+      document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
+      document.querySelectorAll('.nav a').forEach(link => link.classList.remove('active'));
+
+      document.getElementById(id).classList.add('active');
+      event.target.classList.add('active');
+    }
+
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark-mode');
+    }
+
+    function performSearch() {
+      const query = document.getElementById("searchInput").value;
+      const dorkFilters = 'allintext:"politics" "tunis" "tunisia" -sports -entertainment';
+      const finalQuery = `${dorkFilters} ${query}`;
+      const searchURL = `https://www.google.com/search?q=${encodeURIComponent(finalQuery)}`;
+      window.open(searchURL, "_blank");
+    }
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="virus_total.js"></script>
+</body>
+</html>
