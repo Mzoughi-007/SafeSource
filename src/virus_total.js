@@ -1,4 +1,4 @@
-const API_KEY = "67561afebbb37adbd70041af6c107496991622bdbb2479ed00b09a3c126d4fa6";
+const API_KEY = "secret";
 
 async function scanUrl() {
   const url = document.getElementById("urlInput").value.trim();
